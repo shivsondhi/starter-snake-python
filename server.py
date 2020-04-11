@@ -87,10 +87,10 @@ class Battlesnake(object):
         dirns[move] = 1
         # beware of yourself and other snakes
         while True:
-            new_xpos = my_pos["x"] + move_results[move][0]
-            new_ypos = my_pos["y"] + move_results[move][1]
             # yourself
             for body_part in data["board"]["you"]["body"]:
+                new_xpos = my_pos["x"] + move_results[move][0]
+                new_ypos = my_pos["y"] + move_results[move][1]
                 if new_xpos == body_part["x"] and new_ypos == body_part["y"]:
                     if move in possible_moves:
                         possible_moves.remove(move)
@@ -108,6 +108,8 @@ class Battlesnake(object):
             # other snakes
             for snake in data["board"]["snakes"]:
                 for body_part in snake["body"]:
+                    new_xpos = my_pos["x"] + move_results[move][0]
+                    new_ypos = my_pos["y"] + move_results[move][1]
                     if new_xpos == body_part["x"] and new_ypos == body_part["y"]:
                         if move in possible_moves:
                             possible_moves.remove(move)
