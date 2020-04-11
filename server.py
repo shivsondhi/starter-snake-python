@@ -38,7 +38,7 @@ class Battlesnake(object):
         # Valid moves are "up", "down", "left", or "right".
         # TODO: Use the information in cherrypy.request.json to decide your next move.
         data = cherrypy.request.json
-        print(data)
+        # print(data)
         # Choose a random direction to move in
         dirns = {"up": 0, "down": 0, "left": 0, "right": 0}
         move_results = {
@@ -65,20 +65,24 @@ class Battlesnake(object):
         food_dist = [(abs(food['x']-my_pos['x']) + abs(food['y']-my_pos['y'])) for food in data["board"]["food"]]
         move_to = data["board"]["food"][food_dist.index(min(food_dist))]
         # move towards the food
-        if move_to['x'] > my_pos['x']:
+        if move_to['x'] > my_pos['x'] and "left" in possible_moves:
             possible_moves.remove("left")
-        elif move_to['x'] < my_pos['x']:
+        elif move_to['x'] < my_pos['x'] and "right" in possible_moves:
             possible_moves.remove("right")
         else:
-            possible_moves.remove("left")
-            possible_moves.remove("right")
-        if move_to["y"] > my_pos["y"]:
+            if "left" in possible_moves:
+                possible_moves.remove("left")
+            if "right" in possible_moves:
+                possible_moves.remove("right")
+        if move_to["y"] > my_pos["y"] and "up" in possible_moves:
             possible_moves.remove("up")
-        elif move_to["y"] < my_pos["y"]:
+        elif move_to["y"] < my_pos["y"] and "down" in possible_moves:
             possible_moves.remove("down")
         else:
-            possible_moves.remove("up")
-            possible_moves.remove("down")
+            if "up" in possible_moves:
+                possible_moves.remove("up")
+            if "down" in possible_moves:
+                possible_moves.remove("down")
         move = random.choice(possible_moves)
         dirns[move] = 1
         # beware of other snakes
