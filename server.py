@@ -86,7 +86,7 @@ class Battlesnake(object):
                             move = random.choice(possible_moves)
                             dirns[move] = 1
                         else:
-                            spare_moves = [x for x in dirn.keys() if dirn[x]==0]
+                            spare_moves = [x for x in dirns.keys() if dirns[x]==0]
                             if spare_moves:
                                 move = random.choice(spare_moves)
                             else:
