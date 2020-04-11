@@ -61,9 +61,6 @@ class Battlesnake(object):
             possible_moves.remove("down")
         elif my_dirn["y"] < my_pos["y"]:
             possible_moves.remove("up")
-        else:
-            possible_moves.remove("up")
-            possible_moves.remove("down")
         # find nearest piece of food
         food_dist = [(abs(food['x']-my_pos['x']) + abs(food['y']-my_pos['y'])) for food in data["board"]["food"]]
         move_to = data["board"]["food"][food_dist.index(min(food_dist))]
