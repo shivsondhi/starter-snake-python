@@ -48,12 +48,22 @@ class Battlesnake(object):
             "right": (1, 0)
         }
         possible_moves = ["up", "down", "left", "right"]
-        # move = random.choice(possible_moves)
-        # move = "right"
-
+        # get environment data
         h = data["board"]["height"]
         w = data["board"]["width"]
         my_pos = data["you"]["body"][0]
+        my_dirn = data["you"]["body"][1]
+        if my_dirn['x'] > my_pos['x']:
+            possible_moves.remove("right")
+        elif my_dirn['x'] < my_pos['x']:
+            possible_moves.remove("left")
+        if my_dirn["y"] > my_pos["y"]:
+            possible_moves.remove("down")
+        elif my_dirn["y"] < my_pos["y"]:
+            possible_moves.remove("up")
+        else:
+            possible_moves.remove("up")
+            possible_moves.remove("down")
         # find nearest piece of food
         food_dist = [(abs(food['x']-my_pos['x']) + abs(food['y']-my_pos['y'])) for food in data["board"]["food"]]
         move_to = data["board"]["food"][food_dist.index(min(food_dist))]
@@ -81,7 +91,8 @@ class Battlesnake(object):
             for snake in data["board"]["snakes"]:
                 for body_part in snake["body"]:
                     if new_xpos == body_part["x"] and new_ypos == body_part["y"]:
-                        possible_moves.remove(move)
+                        if move in possible_moves:
+                            possible_moves.remove(move)
                         if possible_moves:
                             move = random.choice(possible_moves)
                             dirns[move] = 1
