@@ -40,9 +40,61 @@ class Battlesnake(object):
         data = cherrypy.request.json
         print(data)
         # Choose a random direction to move in
+        dirns = {"up": 0, "down": 0, "left": 0, "right": 0}
+        move_results = {
+            "up": (0, 1),
+            "down": (0, -1),
+            "left": (-1, 0),
+            "right": (1, 0)
+        }
         possible_moves = ["up", "down", "left", "right"]
+        # move = random.choice(possible_moves)
+        # move = "right"
+
+        h = data["board"]["height"]
+        w = data["board"]["width"]
+        my_pos = data["you"]["body"][0]
+        # find nearest piece of food
+        food_dist = [(abs(food['x']-my_pos['x']) + abs(food['y']-my_pos['y'])) for food in data["board"]["food"]]
+        move_to = data["board"]["food"][food_dist.index(min(food_dist))]
+        # move towards the food
+        if move_to['x'] > my_pos['x']:
+            possible_moves.remove("left")
+        elif move_to['x'] < my_pos['x']:
+            possible_moves.remove("right")
+        else:
+            possible_moves.remove("left")
+            possible_moves.remove("right")
+        if move_to["y"] > my_pos["y"]:
+            possible_moves.remove("up")
+        elif move_to["y"] < my_pos["y"]:
+            possible_moves.remove("down")
+        else:
+            possible_moves.remove("up")
+            possible_moves.remove("down")
         move = random.choice(possible_moves)
-        move = "right"
+        dirns[move] = 1
+        # beware of other snakes
+        while True:
+            new_xpos = my_pos["x"] + move_results[move][0]
+            new_ypos = my_pos["y"] + move_results[move][1]
+            for snake in data["board"]["snakes"]:
+                for body_part in snake["body"]:
+                    if new_xpos == body_part["x"] and new_ypos == body_part["y"]:
+                        possible_moves.remove(move)
+                        if possible_moves:
+                            move = random.choice(possible_moves)
+                            dirns[move] = 1
+                        else:
+                            spare_moves = [x for x in dirn.keys() if dirn[x]==0]
+                            if spare_moves:
+                                move = random.choice(spare_moves)
+                            else:
+                                move = random.choice(dirns.keys())
+                                break
+                        continue
+            break
+
         print("MOVE: {}".format(move))
         return {"move": move}
 
