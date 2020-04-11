@@ -87,23 +87,23 @@ class Battlesnake(object):
         dirns[move] = 1
         # beware of yourself and other snakes
         while True:
-            # yourself
-            for body_part in data["board"]["you"]["body"]:
-                new_xpos = my_pos["x"] + move_results[move][0]
-                new_ypos = my_pos["y"] + move_results[move][1]
-                if new_xpos == body_part["x"] and new_ypos == body_part["y"]:
-                    possible_moves.remove(move)
-                    move = random.choice(possible_moves)
-                    dirns[move] = 1
-                    # else:
-                    #     spare_moves = [x for x in dirns.keys() if dirns[x]==0]
-                    #     if spare_moves:
-                    #         move = random.choice(spare_moves)
-                    #     else:
-                    #         move = random.choice(dirns.keys())
-                    #         break
-                    # continue
-            # other snakes
+            # # yourself
+            # for body_part in data["board"]["you"]["body"]:
+            #     new_xpos = my_pos["x"] + move_results[move][0]
+            #     new_ypos = my_pos["y"] + move_results[move][1]
+            #     if new_xpos == body_part["x"] and new_ypos == body_part["y"]:
+            #         possible_moves.remove(move)
+            #         move = random.choice(possible_moves)
+            #         dirns[move] = 1
+            #         # else:
+            #         #     spare_moves = [x for x in dirns.keys() if dirns[x]==0]
+            #         #     if spare_moves:
+            #         #         move = random.choice(spare_moves)
+            #         #     else:
+            #         #         move = random.choice(dirns.keys())
+            #         #         break
+            #         # continue
+            # # other snakes
             for snake in data["board"]["snakes"]:
                 for body_part in snake["body"]:
                     new_xpos = my_pos["x"] + move_results[move][0]
