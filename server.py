@@ -65,11 +65,11 @@ class Battlesnake(object):
         # don't go off the board 
         if my_pos['x'] == 0:
             possible_moves.remove('left')
-        elif my_pos['x'] == w:
+        elif my_pos['x'] == w-1:
             possible_moves.remove('right')
         if my_pos['y'] == 0:
             possible_moves.remove('up')
-        elif my_pos['y'] == h:
+        elif my_pos['y'] == h-1:
             possible_moves.remove('down')
         # find nearest piece of food
         food_dist = [(abs(food['x']-my_pos['x']) + abs(food['y']-my_pos['y'])) for food in data["board"]["food"]]
