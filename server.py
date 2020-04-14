@@ -42,8 +42,8 @@ class Battlesnake(object):
         # Choose a random direction to move in
         dirns = {"up": 0, "down": 0, "left": 0, "right": 0}
         move_results = {
-            "up": [0, 1],
-            "down": [0, -1],
+            "up": [0, -1],
+            "down": [0, 1],
             "left": [-1, 0],
             "right": [1, 0]
         }
@@ -107,7 +107,7 @@ class Battlesnake(object):
             move = random.choice(backup_moves)
         else:
             move = random.choice(possible_moves)
-        dirns[move] = 1
+        # dirns[move] = 1
         # beware of yourself 
         for body_part in data["you"]["body"]:
             new_xpos = my_pos["x"] + move_results[move][0]
@@ -123,7 +123,7 @@ class Battlesnake(object):
                     move = random.choice(backup_moves)
                 else:
                     move = random.choice(possible_moves)
-                dirns[move] = 1
+                # dirns[move] = 1
         # beware of other snakes
         for snake in data["board"]["snakes"]:
             for body_part in snake["body"]:
@@ -140,7 +140,7 @@ class Battlesnake(object):
                             if not backup_moves:
                                 return {"move": "up"}
                         move = random.choice(spare_moves)
-                    dirns[move] = 1
+                    # dirns[move] = 1
         print("MOVE: {}".format(move))
         return {"move": move}
 
