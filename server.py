@@ -75,26 +75,39 @@ class Battlesnake(object):
         # find nearest piece of food
         food_dist = [(abs(food['x']-my_pos['x']) + abs(food['y']-my_pos['y'])) for food in data["board"]["food"]]
         move_to = data["board"]["food"][food_dist.index(min(food_dist))]
+        backup_moves = []
         # move towards the food
         if move_to['x'] > my_pos['x'] and "left" in possible_moves:
+            backup_moves.append("left")
             possible_moves.remove("left")
         elif move_to['x'] < my_pos['x'] and "right" in possible_moves:
+            backup_moves.append("right")
             possible_moves.remove("right")
         else:
             if "left" in possible_moves:
+                backup_moves.append("left")
                 possible_moves.remove("left")
             if "right" in possible_moves:
+                backup_moves.append("right")
                 possible_moves.remove("right")
         if move_to["y"] > my_pos["y"] and "up" in possible_moves:
+            backup_moves.append("up")
             possible_moves.remove("up")
         elif move_to["y"] < my_pos["y"] and "down" in possible_moves:
+            backup_moves.append("down")
             possible_moves.remove("down")
         else:
             if "up" in possible_moves:
+                backup_moves.append("up")
                 possible_moves.remove("up")
             if "down" in possible_moves:
+                backup_moves.append("down")
                 possible_moves.remove("down")
-        move = random.choice(possible_moves)
+        # if no possible moves towards food, include non-food going moves
+        if not possible_moves:
+            move = random.choice(backup_moves)
+        else:
+            move = random.choice(possible_moves)
         dirns[move] = 1
         # beware of yourself and other snakes
         while True:
