@@ -51,8 +51,10 @@ class Battlesnake(object):
         # get environment data
         h = data["board"]["height"]
         w = data["board"]["width"]
+        print("h={} w={}".format(h, w))
         my_pos = data["you"]["body"][0]
         my_dirn = data["you"]["body"][1]
+        # don't reverse into yourself 
         if my_dirn['x'] > my_pos['x']:
             possible_moves.remove("right")
         elif my_dirn['x'] < my_pos['x']:
@@ -61,6 +63,10 @@ class Battlesnake(object):
             possible_moves.remove("down")
         elif my_dirn["y"] < my_pos["y"]:
             possible_moves.remove("up")
+        # don't go off the board 
+        if my_pos['x'] == 0:
+            possible_moves.remove('left')
+        elif my_pos['x'] == w
         # find nearest piece of food
         food_dist = [(abs(food['x']-my_pos['x']) + abs(food['y']-my_pos['y'])) for food in data["board"]["food"]]
         move_to = data["board"]["food"][food_dist.index(min(food_dist))]
