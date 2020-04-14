@@ -42,10 +42,10 @@ class Battlesnake(object):
         # Choose a random direction to move in
         dirns = {"up": 0, "down": 0, "left": 0, "right": 0}
         move_results = {
-            "up": (0, 1),
-            "down": (0, -1),
-            "left": (-1, 0),
-            "right": (1, 0)
+            "up": [0, 1],
+            "down": [0, -1],
+            "left": [-1, 0],
+            "right": [1, 0]
         }
         possible_moves = ["up", "down", "left", "right"]
         # get environment data
@@ -74,7 +74,7 @@ class Battlesnake(object):
         # find nearest piece of food
         food_dist = [(abs(food['x']-my_pos['x']) + abs(food['y']-my_pos['y'])) for food in data["board"]["food"]]
         move_to = data["board"]["food"][food_dist.index(min(food_dist))]
-        backup_moves = []
+        backup_moves = []       # going away from nearest food
         # move towards the food
         if move_to['x'] > my_pos['x'] and "left" in possible_moves:
             backup_moves.append("left")
@@ -102,7 +102,7 @@ class Battlesnake(object):
             if "down" in possible_moves:
                 backup_moves.append("down")
                 possible_moves.remove("down")
-        # if no possible moves towards food, include non-food going moves
+        # if no possible moves towards food, include non-food-going moves
         if not possible_moves:
             move = random.choice(backup_moves)
         else:
