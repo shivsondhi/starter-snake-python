@@ -38,7 +38,7 @@ class Battlesnake(object):
         # Valid moves are "up", "down", "left", or "right".
         # TODO: Use the information in cherrypy.request.json to decide your next move.
         data = cherrypy.request.json
-        # print(data)
+        print(data)
         # Choose a random direction to move in
         dirns = {"up": 0, "down": 0, "left": 0, "right": 0}
         move_results = {
@@ -51,7 +51,6 @@ class Battlesnake(object):
         # get environment data
         h = data["board"]["height"]
         w = data["board"]["width"]
-        print("h={} w={}".format(h, w))
         my_pos = data["you"]["body"][0]
         my_dirn = data["you"]["body"][1]
         # don't reverse into yourself 
@@ -109,25 +108,24 @@ class Battlesnake(object):
         else:
             move = random.choice(possible_moves)
         dirns[move] = 1
-        # beware of yourself and other snakes
-        while True:
-            # yourself
-            for body_part in data["you"]["body"]:
-                new_xpos = my_pos["x"] + move_results[move][0]
-                new_ypos = my_pos["y"] + move_results[move][1]
-                if new_xpos == body_part["x"] and new_ypos == body_part["y"]:
+        # beware of yourself 
+        for body_part in data["you"]["body"]:
+            new_xpos = my_pos["x"] + move_results[move][0]
+            new_ypos = my_pos["y"] + move_results[move][1]
+            if new_xpos == body_part["x"] and new_ypos == body_part["y"]:
+                if len(possible_moves) > 0:
                     possible_moves.remove(move)
+                if not possible_moves:
+                    if move in backup_moves:
+                        backup_moves.remove(move)
+                        if not backup_moves:
+                            return {"move": "up"}
+                    move = random.choice(backup_moves)
+                else:
                     move = random.choice(possible_moves)
-                    dirns[move] = 1
-                    # else:
-                    #     spare_moves = [x for x in dirns.keys() if dirns[x]==0]
-                    #     if spare_moves:
-                    #         move = random.choice(spare_moves)
-                    #     else:
-                    #         move = random.choice(dirns.keys())
-                    #         break
-                    # continue
-            # # other snakes
+                dirns[move] = 1
+        # beware of other snakes
+        while True:
             for snake in data["board"]["snakes"]:
                 for body_part in snake["body"]:
                     new_xpos = my_pos["x"] + move_results[move][0]
