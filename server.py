@@ -1,3 +1,8 @@
+'''
+Don't get stuck in your own loops!!
+Beware of head-to-heads.
+'''
+
 import os
 import random
 import cherrypy
